@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /var/home/cameron/fydp/catkin_ws/devel/setup.sh

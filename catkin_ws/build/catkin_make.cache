@@ -1,0 +1,2 @@
+cpr_office_gazebo
+-DCATKIN_DEVEL_PREFIX=/var/home/cameron/fydp/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/var/home/cameron/fydp/catkin_ws/install -G Unix Makefiles
