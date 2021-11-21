@@ -4,3 +4,5 @@ services:
     build: ./controller
   stm:
     build: ./stm
+  openni:
+    build: ./openni
