@@ -1,0 +1,8 @@
+version: "3.3"
+services:
+  openni:
+    build: ./openni
+  rtabmap:
+    build: ./rtabmap
+  controller:
+    build: ./controller

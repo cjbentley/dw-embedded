@@ -1,0 +1,6 @@
+version: "3.3"
+services:
+  controller:
+    build: ./controller
+  stm:
+    build: ./stm
