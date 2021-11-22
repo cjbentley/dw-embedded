@@ -6,3 +6,5 @@ services:
     build: ./stm
   openni:
     build: ./openni
+    ports:
+      - 11311:11311
