@@ -1,10 +1,38 @@
 version: "3.3"
 services:
-  controller:
-    build: ./controller
-  stm:
-    build: ./stm
-  openni:
-    build: ./openni
+  master:
+    image: registry.bentley.sh/jn/master
+    environment:
+      - "ROS_IP=172.10.0.100"
     ports:
       - 11311:11311
+    networks:
+      ros_net:
+        ipv4_address: 172.10.0.100
+
+  openni:
+    image: registry.bentley.sh/jn/openni
+    devices:
+      - /dev/bus/usb/001/018:/dev/bus/usb/001/018
+      - /dev/bus/usb/001/019:/dev/bus/usb/001/019
+      - /dev/bus/usb/001/020:/dev/bus/usb/001/020
+    environment:
+      - "ROS_IP=172.10.0.101"
+      - "ROS_MASTER_URI=http://172.10.0.100:11311"
+    networks:
+      ros_net:
+        ipv4_address: 172.10.0.101
+
+  controller:
+    image: registry.bentley.sh/jn/controller
+
+  stm:
+    image: registry.bentley.sh/jn/stm
+
+networks:
+  ros_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.10.0.0/24
