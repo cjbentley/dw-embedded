@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   master:
-    image: registry.bentley.sh/jn/master
+    image: registry.bentley.sh/jn/master:latest
     environment:
       - "ROS_IP=172.10.0.100"
     ports:
@@ -11,7 +11,7 @@ services:
         ipv4_address: 172.10.0.100
 
   openni:
-    image: registry.bentley.sh/jn/openni
+    image: registry.bentley.sh/jn/openni:latest
     devices:
       - /dev/bus/usb/001/018:/dev/bus/usb/001/018
       - /dev/bus/usb/001/019:/dev/bus/usb/001/019
@@ -24,10 +24,10 @@ services:
         ipv4_address: 172.10.0.101
 
   controller:
-    image: registry.bentley.sh/jn/controller
+    image: registry.bentley.sh/jn/controller:latest
 
   stm:
-    image: registry.bentley.sh/jn/stm
+    image: registry.bentley.sh/jn/stm:latest
 
 networks:
   ros_net:
