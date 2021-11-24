@@ -13,9 +13,7 @@ services:
   openni:
     image: registry.bentley.sh/jn/openni:latest
     devices:
-      - /dev/bus/usb/001/018:/dev/bus/usb/001/018
-      - /dev/bus/usb/001/019:/dev/bus/usb/001/019
-      - /dev/bus/usb/001/020:/dev/bus/usb/001/020
+      - /dev/bus/usb/001:/dev/bus/usb/001
     environment:
       - "ROS_IP=172.10.0.101"
       - "ROS_MASTER_URI=http://172.10.0.100:11311"
