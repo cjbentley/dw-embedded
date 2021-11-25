@@ -16,3 +16,6 @@ Interfaces with Xbox 360 Kinect using ROS openni library. Visual and depth data 
 
 ### `rtabmap`
 Develops 3D map
+
+## Useful stuff
+Build and execute with no mess using `docker run --rm -it $(docker build -q .)` in the desired folder

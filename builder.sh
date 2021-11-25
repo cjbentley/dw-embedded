@@ -3,12 +3,14 @@
 # On a clean jetson, auth requires: sudo apt install gnupg2 pass
 docker build -t registry.bentley.sh/jn/master:latest ./jn/master/
 docker build -t registry.bentley.sh/jn/openni:latest ./jn/openni/
+docker build -t registry.bentley.sh/jn/rtabmap:latest ./jn/rtabmap/
 docker build -t registry.bentley.sh/jn/controller:latest ./jn/controller/
 docker build -t registry.bentley.sh/jn/stm:latest ./jn/stm/
 
 # Push everything to private registry
 docker push registry.bentley.sh/jn/master:latest
 docker push registry.bentley.sh/jn/openni:latest
+docker push registry.bentley.sh/jn/rtabmap:latest
 docker push registry.bentley.sh/jn/controller:latest
 docker push registry.bentley.sh/jn/stm:latest
 

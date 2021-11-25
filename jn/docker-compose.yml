@@ -20,6 +20,20 @@ services:
     networks:
       ros_net:
         ipv4_address: 172.10.0.101
+    depends_on:
+      - "master"
+
+  rtabmap:
+    image: registry.bentley.sh/jn/rtabmap:latest
+    environment:
+      - "ROS_IP=172.10.0.102"
+      - "ROS_MASTER_URI=http://172.10.0.100:11311"
+    networks:
+      ros_net:
+        ipv4_address: 172.10.0.102
+    restart: always
+    depends_on:
+      - "master"
 
   controller:
     image: registry.bentley.sh/jn/controller:latest
