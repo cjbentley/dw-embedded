@@ -38,8 +38,11 @@ services:
   controller:
     image: registry.bentley.sh/jn/controller:latest
 
-  stm:
-    image: registry.bentley.sh/jn/stm:latest
+  flasher:
+    privileged: true
+    image: registry.bentley.sh/stm/flasher:latest
+    profiles:
+      - update
 
 networks:
   ros_net:
