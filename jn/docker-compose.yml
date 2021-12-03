@@ -2,6 +2,7 @@ version: "3.3"
 services:
   master:
     image: registry.bentley.sh/jn/master:latest
+    restart: always
     environment:
       - "ROS_IP=172.10.0.100"
     ports:
@@ -13,7 +14,7 @@ services:
   openni:
     image: registry.bentley.sh/jn/openni:latest
     devices:
-      - /dev/bus/usb/001:/dev/bus/usb/001
+      - /dev/bus/usb:/dev/bus/usb
     environment:
       - "ROS_IP=172.10.0.101"
       - "ROS_MASTER_URI=http://172.10.0.100:11311"
@@ -34,9 +35,12 @@ services:
     restart: always
     depends_on:
       - "master"
+      - "openni"
 
   controller:
     image: registry.bentley.sh/jn/controller:latest
+    profiles:
+      - manual
 
   flasher:
     privileged: true

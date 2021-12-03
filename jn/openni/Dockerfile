@@ -22,7 +22,7 @@ RUN git clone https://github.com/ros-perception/image_pipeline.git
 RUN git clone https://github.com/ros/geometry2.git
 WORKDIR /opt/ros/overlay_ws
 RUN rosdep install --from-paths src --ignore-src -r -y
-RUN catkin config --extend /opt/ros/$ROS_DISTRO
+RUN catkin config --extend /opt/ros/$ROS_DI STRO
 RUN catkin build
 
 # Development tools, can be removed for deployment
