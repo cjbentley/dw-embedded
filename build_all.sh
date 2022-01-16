@@ -5,6 +5,8 @@
 
 read -p 'tagname: ' tagvar
 
+set -e
+
 # Jetson Nano software stack
 docker build -t registry.bentley.sh/jn/master:$tagvar ./jn/master/
 docker build -t registry.bentley.sh/jn/openni:$tagvar ./jn/openni/
