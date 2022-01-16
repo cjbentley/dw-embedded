@@ -1,4 +1,5 @@
 FROM ros:noetic-robot
+ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y ros-noetic-rtabmap-ros && apt-get clean
 
 # Development tools, can be removed for deployment
