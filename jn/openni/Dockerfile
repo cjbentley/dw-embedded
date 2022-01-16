@@ -3,7 +3,7 @@ FROM ros:noetic-robot
 # freenect driver install
 WORKDIR /
 RUN apt-get update && apt-get clean
-RUN apt-get install -y cmake build-essential libusb-1.0-0-dev python3-catkin-tools python3-osrf-pycommon git
+RUN apt-get install -y cmake build,-essential libusb-1.0-0-dev python3-catkin-tools python3-osrf-pycommon git
 RUN git clone https://github.com/OpenKinect/libfreenect.git
 WORKDIR /libfreenect/
 RUN mkdir build

@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # ====================
 # INSTALL COMMON TOOLS
 # ====================
-RUN apt-get update && apt-get install -y net-tools vim cmake
+RUN apt-get update && apt-get install -y net-tools vim cmake nano
 
 
 # ==================
@@ -64,6 +64,14 @@ RUN apt-get update && \
     gstreamer1.0-plugins-good \
     python3-gst-1.0
 
+# ============================
+# INSTALL MISC DEPENDENCIES
+# ============================
+RUN apt-get update && apt-get install -y supervisor unzip
+RUN apt install -y python3-smbus
+RUN pip3 install packaging
+RUN pip3 install pyzmq
+
 
 # =======================
 # INSTALL JUPYTER RELATED
@@ -94,27 +102,22 @@ RUN cd && \
     pip3 install -e . && \
     jupyter labextension install js && \
     jupyter lab build
-    
-# ============================
-# INSTALL MISC DEPENDENCIES
-# ============================
-RUN apt-get update && apt-get install -y supervisor unzip
-RUN apt install -y python3-smbus && pip3 install pyzmq
-
 
 # =================
 # INSTALL TORCH2TRT
 # =================
 ENV TORCH2TRT_REPO_DIR=/opt/
-RUN cd ${TORCH2TRT_REPO_DIR} && \
-    git clone https://github.com/NVIDIA-AI-IOT/torch2trt && \
-    cd torch2trt && \
-    python3 setup.py install
+WORKDIR ${TORCH2TRT_REPO_DIR} 
+RUN git clone https://github.com/NVIDIA-AI-IOT/torch2trt 
+WORKDIR ${TORCH2TRT_REPO_DIR}/torch2trt
+RUN python3 setup.py install
 
 
 # ==============
 # INSTALL JETBOT
 # ==============
 ENV JETBOT_REPO_DIR=/opt/jetbot
-COPY . ${JETBOT_REPO_DIR}
-RUN cd ${JETBOT_REPO_DIR} && python3 setup.py install
+WORKDIR /opt/
+RUN git clone https://github.com/NVIDIA-AI-IOT/jetbot
+WORKDIR ${JETBOT_REPO_DIR}
+RUN python3 setup.py install
