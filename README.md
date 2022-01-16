@@ -1,5 +1,5 @@
 # dw-embedded
-Embedded code for DogWhisperers
+All on-device code for SAARC robot
 
 ## Stack explained
 
