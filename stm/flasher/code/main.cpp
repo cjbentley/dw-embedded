@@ -8,9 +8,8 @@ int main()
     char tmp;
     char out[9];
     while (1) {
-        //pc.scanf(10, &in)
         pc.read(&in, 1);
-        if (in = 10) { // MSG END, LF
+        if (in = 10) { // End of line marker
             for (int i = 0; i < 9; i++) {
                 pc.read(&tmp, 1);
                 out[i] = tmp;

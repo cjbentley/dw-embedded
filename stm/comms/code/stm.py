@@ -12,8 +12,7 @@ while True:
 	ser.write(b'XF024R015\n') # X is dropped 🤔
 	x = ser.read()
 	y = []
-	if x == b'\n':
-		# print(x, ser.read())
+	if x == b'\n': # End of line marker
 		for i in range(0,9):
 			tmp = ser.read()
 			y.append(tmp)
