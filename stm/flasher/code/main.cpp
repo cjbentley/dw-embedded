@@ -4,11 +4,19 @@ static BufferedSerial pc(USBTX, USBRX);
 
 int main()
 {
-    char msg[] = "Echoes back to the screen anything you type\n";
-    char buff[10];
-    pc.write(msg, sizeof(msg));
+    char in;
+    char tmp;
+    char out[8];
     while (1) {
-        pc.read(&buff, 10);
-        pc.write(&buff, 10);
+        //pc.scanf(10, &in)
+        pc.read(&in, 1);
+        if (in = 10) { // MSG END, LF
+            for (int i = 0; i < 8; i++) {
+                pc.read(&tmp, 1);
+                out[i] = tmp;
+            }
+            out[8] = 10;
+            pc.write(&out, 9);
+        }
     }
 }
