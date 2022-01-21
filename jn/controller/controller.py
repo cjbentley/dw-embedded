@@ -4,8 +4,8 @@ import socket
 
 ### Networking
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-target = socket.gethostbyname('jetson'), 10000
-
+#target = socket.gethostbyname('jetson'), 10000
+target = '172.20.22.118', 10000
 
 # please get device vendor and product ID interactively using:
 # for device in hid.enumerate():
@@ -15,8 +15,27 @@ gamepad = hid.device()
 gamepad.open(0x045e, 0x02fd)
 gamepad.set_nonblocking(True) 	# don't hang if device not ready
 stick_tol = 0.05 				# analog stick tolerance for zeroing
+
+### Initialize with zero
+LS_X = 0
+LS_Y = 0 
+RS_X = 0
+RS_Y = 0
+LT = 0 
+RT = 0
+DPAD = 0 
+A = 0 
+B = 0
+X = 0
+Y = 0
+LB = 0 
+RB = 0
+LS_B = 0
+RS_B = 0
+SELECT = 0
+
 while True:
-	time.sleep(0.001)
+	time.sleep(0.01)
 	report = gamepad.read(64)
 	if len(report) == 17: 		# don't want malformed reports
 		### Left stick X-axis
@@ -101,7 +120,7 @@ while True:
 		### Select button handling
 		SELECT = report[16]
 
-		### Sending
-		packaged = '/' + str(LS_X) + '/' + str(LS_Y) + '/' + str(RS_X) + '/' + str(RS_Y) + '/' + str(LT) + '/' + str(RT) + '/' + str(DPAD) + '/' + str(A) + '/' + str(B) + '/' + str(X) + '/' + str(Y) + '/' + str(LB) + '/' + str(RB) + '/' + str(LS_B) + '/' + str(RS_B) + '/' + str(SELECT) + '/'
-		print(packaged)
-		s.sendto(packaged.encode(), target)
+	### Sending
+	packaged = '/' + str(LS_X) + '/' + str(LS_Y) + '/' + str(RS_X) + '/' + str(RS_Y) + '/' + str(LT) + '/' + str(RT) + '/' + str(DPAD) + '/' + str(A) + '/' + str(B) + '/' + str(X) + '/' + str(Y) + '/' + str(LB) + '/' + str(RB) + '/' + str(LS_B) + '/' + str(RS_B) + '/' + str(SELECT) + '/'
+	print(packaged)
+	s.sendto(packaged.encode(), target)

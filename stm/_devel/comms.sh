@@ -11,4 +11,4 @@ fi
 
 DOCKER_BUILDKIT=1 docker build -t registry.bentley.sh/stm/comms:$tagvar ../comms
 docker push registry.bentley.sh/stm/comms:$tagvar
-docker run -i --privileged -t registry.bentley.sh/stm/comms:$tagvar
+docker run -i --network host --privileged -t registry.bentley.sh/stm/comms:$tagvar
