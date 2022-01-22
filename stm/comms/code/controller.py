@@ -1,5 +1,6 @@
 import socket
 import select
+from control_law import control_law
 
 ### Networking configuration
 def connect():
@@ -20,6 +21,8 @@ def command(s):
 	array = data.split('/')
 	array = array[1:-1]
 
+	control_law(array)
+
 	# To make life easier
 	LS_X = array[0]
 	LS_Y = array[1]
@@ -38,9 +41,13 @@ def command(s):
 	RS_B = array[14]
 	SELECT = array[15]
 
+	# Mapping
+	LT = int(round(100*float(LT), 0))
+	RT = int(round(100*float(RT), 0))
+
 	# Robot control
-	motor_L = int(round(100*float(LT), 0))
-	motor_R = int(round(100*float(RT), 0))
+	motor_L = LT
+	motor_R = RT
 
 
 
