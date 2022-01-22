@@ -6,6 +6,6 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY code .
 
-CMD [ "python", "./controller.py" ]
+CMD [ "python", "./stm.py" ]

@@ -1,4 +1,5 @@
 FROM ros:noetic-robot
+ENV DEBIAN_FRONTEND noninteractive
 
 # freenect driver install
 WORKDIR /
