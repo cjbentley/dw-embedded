@@ -13,12 +13,14 @@ docker build -t registry.bentley.sh/jn/openni:$tagvar ./jn/openni/
 docker build -t registry.bentley.sh/jn/rtabmap:$tagvar ./jn/rtabmap/
 docker build -t registry.bentley.sh/jn/controller:$tagvar ./jn/controller/
 docker build -t registry.bentley.sh/jn/stm:$tagvar ./jn/stm/
+docker build -t registry.bentley.sh/jn/web:$tagvar ./jn/web/
 
 docker push registry.bentley.sh/jn/master:$tagvar
 docker push registry.bentley.sh/jn/openni:$tagvar
 docker push registry.bentley.sh/jn/rtabmap:$tagvar
 docker push registry.bentley.sh/jn/controller:$tagvar
 docker push registry.bentley.sh/jn/stm:$tagvar
+docker push registry.bentley.sh/jn/web:$tagvar
 
 # STM32 Comms
 # Build environment, then compile in env

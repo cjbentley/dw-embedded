@@ -18,6 +18,7 @@ services:
     environment:
       - "ROS_IP=172.10.0.101"
       - "ROS_MASTER_URI=http://172.10.0.100:11311"
+    restart: always
     networks:
       ros_net:
         ipv4_address: 172.10.0.101
@@ -35,6 +36,20 @@ services:
     restart: always
     depends_on:
       - "master"
+      - "openni"
+
+  web:
+    image: registry.bentley.sh/jn/web:latest
+    environment:
+      - "ROS_IP=172.10.0.102"
+      - "ROS_MASTER_URI=http://172.10.0.100:11311"
+    networks:
+      ros_net:
+        ipv4_address: 172.10.0.103
+    ports:
+      - 8080:8080
+    restart: always
+    depends_on:
       - "openni"
 
   controller:
