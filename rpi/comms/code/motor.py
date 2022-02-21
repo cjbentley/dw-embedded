@@ -1,4 +1,4 @@
-from controller import connect, command
+from network import connect, command
 import RPi.GPIO as GPIO
 import time
 

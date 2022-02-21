@@ -1,0 +1,8 @@
+version: "3.3"
+services:
+  network:
+    build: command/network/.
+    ports: 
+      - "8000:8000"
+  controller:
+    build: command/controller/.

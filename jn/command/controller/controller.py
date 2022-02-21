@@ -1,13 +1,20 @@
 import hid
 import time
 import socket
+import os
+from control_law import control_law
+
+in_container = os.environ.get('IN_A_CONTAINER', False)
+
+if in_container:
+	target = 'network', 10000
+else:
+	print('Running outside container. Forwarding over Tailscale...')
+	target = '100.114.64.87', 10000
 
 ### Networking
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-target = '192.168.0.115', 10000 #RPi
-#target = '100.86.225.6', 10000 #Jetson
-#target = '172.20.22.118', 10000 #Local
-#target = '100.121.30.22', 10000 #Karan
+
 
 # please get device vendor and product ID interactively using:
 # for device in hid.enumerate():
@@ -123,6 +130,8 @@ while True:
 		SELECT = report[16]
 
 	### Sending
-	packaged = '/' + str(LS_X) + '/' + str(LS_Y) + '/' + str(RS_X) + '/' + str(RS_Y) + '/' + str(LT) + '/' + str(RT) + '/' + str(DPAD) + '/' + str(A) + '/' + str(B) + '/' + str(X) + '/' + str(Y) + '/' + str(LB) + '/' + str(RB) + '/' + str(LS_B) + '/' + str(RS_B) + '/' + str(SELECT) + '/'
+	array = str(LS_X), str(LS_Y), str(RS_X), str(RS_Y), str(LT), str(RT), str(DPAD), str(A), str(B), str(X), str(Y), str(LB), str(RB), str(LS_B), str(RS_B), str(SELECT) 
+	motor_L, motor_R = control_law(array)
+	packaged = str(motor_L) + '/' + str(motor_R)
 	print(packaged)
 	s.sendto(packaged.encode(), target)
