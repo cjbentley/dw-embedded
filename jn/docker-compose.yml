@@ -41,11 +41,12 @@ services:
   web:
     image: registry.bentley.sh/jn/web:latest
     environment:
-      - "ROS_IP=172.10.0.102"
+      - "ROS_IP=172.10.0.103"
       - "ROS_MASTER_URI=http://172.10.0.100:11311"
     networks:
       ros_net:
         ipv4_address: 172.10.0.103
+      internet:
     ports:
       - 8080:8080
     restart: always
@@ -63,6 +64,19 @@ services:
     profiles:
       - update
 
+  tailscale:
+    image: cjbentley/tailscale-docker-router
+    volumes:
+      - "./state:/var/lib"
+      - "/dev/net/tun:/dev/net/tun"
+    cap_add:
+      - net_admin
+      - sys_module
+    environment:
+      - "custom_web=web:8080"
+    networks:
+      - internet
+
 networks:
   ros_net:
     driver: bridge
@@ -70,3 +84,11 @@ networks:
       driver: default
       config:
       - subnet: 172.10.0.0/24
+
+  internet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.11.0.0/24
+

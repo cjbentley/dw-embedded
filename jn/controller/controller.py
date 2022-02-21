@@ -4,7 +4,8 @@ import socket
 
 ### Networking
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-target = '100.86.225.6', 10000 #Jetson
+target = '192.168.0.115', 10000 #RPi
+#target = '100.86.225.6', 10000 #Jetson
 #target = '172.20.22.118', 10000 #Local
 #target = '100.121.30.22', 10000 #Karan
 
