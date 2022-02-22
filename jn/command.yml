@@ -6,3 +6,7 @@ services:
       - "8000:8000"
   controller:
     build: command/controller/.
+  mysaarc:
+    build: command/mysaarc/.
+    ports:
+      - "8765:8765"
