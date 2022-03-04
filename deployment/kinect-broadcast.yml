@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+  openni:
+    image: registry.bentley.sh/jn/openni:latest
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+    network_mode: "host"
+    environment:
+      - "ROS_IP=100.109.227.45"
+      - "ROS_MASTER_URI=http://100.77.206.50:11311"
+    restart: always

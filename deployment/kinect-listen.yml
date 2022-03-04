@@ -1,0 +1,78 @@
+version: "3.3"
+services:
+  master:
+    image: registry.bentley.sh/jn/master:latest
+    restart: always
+    ports:
+      - 11311:11311
+    networks:
+      internet:
+      ros_net:
+        ipv4_address: 172.10.0.100
+
+  rtabmap:
+    image: registry.bentley.sh/jn/rtabmap:latest
+    environment:
+      - "ROS_IP=172.10.0.102"
+      - "ROS_MASTER_URI=http://172.10.0.100:11311"
+    networks:
+      ros_net:
+        ipv4_address: 172.10.0.102
+    restart: always
+    depends_on:
+      - "master"
+
+  web:
+    image: registry.bentley.sh/jn/web:latest
+    environment:
+      - "ROS_IP=172.10.0.103"
+      - "ROS_MASTER_URI=http://172.10.0.100:11311"
+    networks:
+      ros_net:
+        ipv4_address: 172.10.0.103
+      internet:
+    ports:
+      - 8080:8080
+    restart: always
+
+
+  controller:
+    image: registry.bentley.sh/jn/controller:latest
+    profiles:
+      - manual
+
+  flasher:
+    privileged: true
+    image: registry.bentley.sh/stm/flasher:latest
+    profiles:
+      - update
+
+  tailscale:
+    image: cjbentley/tailscale-docker-router
+    volumes:
+      - "./state:/var/lib"
+      - "/dev/net/tun:/dev/net/tun"
+    cap_add:
+      - net_admin
+      - sys_module
+    environment:
+      - "custom_web=web:8080"
+      - "custom_ros=master:11311"
+    networks:
+      - internet
+
+networks:
+  ros_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.10.0.0/24
+
+  internet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.11.0.0/24
+
