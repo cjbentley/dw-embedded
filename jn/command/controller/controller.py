@@ -10,7 +10,7 @@ if in_container:
 	target = 'network', 10000
 else:
 	print('Running outside container. Forwarding over Tailscale...')
-	target = '100.114.64.87', 10000
+	target = '100.77.206.50', 10000
 
 ### Networking
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -132,6 +132,7 @@ while True:
 	### Sending
 	array = str(LS_X), str(LS_Y), str(RS_X), str(RS_Y), str(LT), str(RT), str(DPAD), str(A), str(B), str(X), str(Y), str(LB), str(RB), str(LS_B), str(RS_B), str(SELECT) 
 	motor_L, motor_R = control_law(array)
+	print(array)
 	packaged = str(motor_L) + '/' + str(motor_R)
 	print(packaged)
 	s.sendto(packaged.encode(), target)

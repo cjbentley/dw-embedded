@@ -3,10 +3,10 @@ import RPi.GPIO as GPIO
 import time
 
 s = connect()
-left_pwm = 13
+left_pwm = 12
 left_dir = 5
-right_pwm=18
-right_dir=23
+right_pwm=13
+right_dir=6
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(left_pwm, GPIO.OUT)
 GPIO.setup(left_dir, GPIO.OUT)

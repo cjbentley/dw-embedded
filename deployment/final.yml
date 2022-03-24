@@ -3,12 +3,10 @@ services:
   master:
     image: registry.bentley.sh/jn/master:latest
     restart: always
-    environment:
-      - "ROS_IP=172.10.0.100"
     ports:
       - 11311:11311
     networks:
-      internet:
+      # internet:
       ros_net:
         ipv4_address: 172.10.0.100
 
@@ -35,49 +33,67 @@ services:
       ros_net:
         ipv4_address: 172.10.0.102
     restart: always
+    profiles:
+      - mapping
     depends_on:
       - "master"
       - "openni"
 
-  web:
-    image: registry.bentley.sh/jn/web:latest
+  web-video:
+    image: registry.bentley.sh/jn/web/video:latest
     environment:
       - "ROS_IP=172.10.0.103"
       - "ROS_MASTER_URI=http://172.10.0.100:11311"
     networks:
       ros_net:
         ipv4_address: 172.10.0.103
-      internet:
+      # internet:
     ports:
       - 8080:8080
     restart: always
     depends_on:
       - "openni"
 
-  controller:
-    image: registry.bentley.sh/jn/controller:latest
-    profiles:
-      - manual
+  tf:
+    image: registry.bentley.sh/jn/tf:latest
+    environment:
+      - "ROS_IP=172.10.0.104"
+      - "ROS_MASTER_URI=http://172.10.0.100:11311"
+    networks:
+      ros_net:
+        ipv4_address: 172.10.0.104
+
+  web-ui:
+    image: registry.bentley.sh/jn/web/ui:latest
+    ports:
+      - 80:80
+    networks:
+      - ros_net
+
+  command-follower:
+    image: registry.bentley.sh/jn/command/follower:latest
+    environment:
+      - "ROS_MASTER_URI=http://172.10.0.100:11311"
+    networks:
+      - ros_net
+
+  command-network:
+    image: registry.bentley.sh/jn/command/network:latest
+    networks:
+      - ros_net
+
+  command-mysaarc:
+    image: registry.bentley.sh/jn/command/mysaarc:latest
+    ports:
+      - 8765:8765
+    networks:
+      - ros_net
 
   flasher:
     privileged: true
     image: registry.bentley.sh/stm/flasher:latest
     profiles:
       - update
-
-  tailscale:
-    image: cjbentley/tailscale-docker-router
-    volumes:
-      - "./state:/var/lib"
-      - "/dev/net/tun:/dev/net/tun"
-    cap_add:
-      - net_admin
-      - sys_module
-    environment:
-      - "custom_web=web:8080"
-      - "custom_ros=master:11311"
-    networks:
-      - internet
 
 networks:
   ros_net:
@@ -86,11 +102,12 @@ networks:
       driver: default
       config:
       - subnet: 172.10.0.0/24
+        gateway: 100.109.227.45
 
-  internet:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-      - subnet: 172.11.0.0/24
+  # internet:
+  #   driver: bridge
+  #   ipam:
+  #     driver: default
+  #     config:
+  #     - subnet: 172.11.0.0/24
 

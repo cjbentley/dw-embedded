@@ -1,0 +1,165 @@
+<head>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+	<div class="one"><img src="http://100.109.227.45:8080/stream?topic=/camera/rgb/image_color"></div>
+
+	<div class="two">
+		<p>Throttle</p>
+		<div class="slidecontainer">
+			<input type="range" min="-100" max="100" value="0" class="slider" id="throttle">
+		</div>
+	</div>
+
+	<div class="three">
+		<p>Steering</p>
+		<div class="slidecontainer">
+			<input type="range" min="-100" max="100" value="0" class="slider" id="steering">
+		</div>
+	</div>
+
+	<div class="four">
+		<p>Ball Release</p>
+		<div class="slidecontainer">
+			<input type="button" id="ball" value="Closed"></button>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+</body>
+
+<script>
+	var LS_X = 0 
+	var LS_Y = 0 
+	var RS_X = 0 
+	var RS_Y = 0 
+	var LT = 0 
+	var RT = 0
+	var DPAD = 0
+	var A = 0
+	var B = 0
+	var X = 0
+	var Y = 0
+	var LB = 0
+	var RB = 0
+	var LS_B = 0
+	var RS_B =  0
+	var SELECT = 0
+	// Main loop, gamepad handling
+	setInterval(function () {
+		gamepads = navigator.getGamepads();
+		console.log(gamepads[0].timestamp)
+
+		if (gamepads.length != 0){
+			LS_X = gamepads[0].axes[0]
+			LS_Y = gamepads[0].axes[1]
+			RS_X = gamepads[0].axes[2]
+			RS_Y = gamepads[0].axes[3]
+		 	LT = gamepads[0].buttons[6].value
+		 	RT = gamepads[0].buttons[7].value
+		 	DPAD = 0
+		 	// gamepads[0].buttons[12].value + (gamepads[0].buttons[13].value * 5) + (gamepads[0].buttons[14].value * 7) + (gamepads[0].buttons[15].value % gamepads[0].buttons[12].value)
+		 	A = gamepads[0].buttons[0].value
+		 	B = gamepads[0].buttons[1].value
+		 	X = gamepads[0].buttons[2].value
+		 	Y = gamepads[0].buttons[3].value
+		 	LB = gamepads[0].buttons[4].value
+		 	RB = gamepads[0].buttons[5].value
+		 	LS_B = gamepads[0].buttons[10].value
+		 	RS_B = gamepads[0].buttons[11].value
+		 	SELECT = gamepads[0].buttons[8].value
+			if (Math.abs(LT) > Math.abs(RT)){
+				throttle.value = -LT*100
+			}
+			if (Math.abs(LT) < Math.abs(RT)) {
+				throttle.value = RT*100
+			}
+			throttle.oninput()
+			steering.value = LS_X * 100
+			if (buttonPressed(gamepads[0].buttons[0]) != ballState) {
+				ball.onclick()
+			}
+		}
+	}, 1000/60)
+
+
+	// Networking configuration
+	function isOpen(ws) { return ws.readyState === ws.OPEN }
+
+	function setupWebSocket(){
+	    this.ws = new WebSocket('ws://100.109.227.45:8765/');
+	    this.ws.onclose = function(){
+	        setTimeout(setupWebSocket, 5000);
+	    };
+	}
+
+	function sendData(){
+		message = LS_X + '/' + LS_Y + '/' + RS_X + '/' + RS_Y + '/' + LT + '/' + RT + '/' + DPAD + '/' + A + '/' + B + '/' + X + '/' + Y + '/' + LB + '/' + RB + '/' + LS_B + '/' + RS_B + '/' + SELECT;
+		websocket.send(message)
+	}
+
+	const websocket = new setupWebSocket().ws;
+
+	// Gamepad configuration
+	var gamepads = {};
+
+	function buttonPressed(b) {
+	  if (typeof(b) == "object") {
+	    return b.pressed;
+	  }
+	  return b == 1.0;
+	}
+
+	function gamepadHandler(event, connecting) {
+	  var gamepad = event.gamepad;
+	  // Note:
+	  // gamepad === navigator.getGamepads()[gamepad.index]
+
+	  if (connecting) {
+	    gamepads[gamepad.index] = gamepad;
+	  } else {
+	    delete gamepads[gamepad.index];
+	  }
+	}
+
+	window.addEventListener("gamepadconnected", function(e) { gamepadHandler(e, true); }, false);
+	window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler(e, false); }, false);
+
+
+	// Buttom configuration
+	var throttle = document.getElementById("throttle");
+	var steering = document.getElementById("steering");
+
+	var ballState = 0;
+
+	ball.onclick = function() {
+		if (ballState == 1) {
+			ballState = 0
+			ball.value = "Closed"
+		}
+		else if (ballState == 0) {
+			ballState = 1
+			ball.value = "Open"
+		}
+		sendData()
+	}
+
+	throttle.oninput = function() {
+		if (!isOpen(websocket)) return;
+		console.log("Send")
+	    sendData();
+	}
+
+	steering.oninput=  function() {
+		if (!isOpen(websocket)) return;
+		console.log("Send")
+		sendData();
+	}
+</script>

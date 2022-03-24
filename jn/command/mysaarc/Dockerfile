@@ -1,5 +1,6 @@
 FROM python:3
 ENV DEBIAN_FRONTEND noninteractive
+ENV IN_A_CONTAINER Yes
 
 WORKDIR /usr/src/app
 

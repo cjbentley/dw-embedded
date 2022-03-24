@@ -6,7 +6,7 @@ services:
     ports:
       - 11311:11311
     networks:
-      internet:
+      # internet:
       ros_net:
         ipv4_address: 172.10.0.100
 
@@ -30,10 +30,20 @@ services:
     networks:
       ros_net:
         ipv4_address: 172.10.0.103
-      internet:
+      # internet:
     ports:
       - 8080:8080
     restart: always
+
+  tf:
+    image: registry.bentley.sh/jn/tf:latest
+    environment:
+      - "ROS_IP=172.10.0.104"
+      - "ROS_MASTER_URI=http://172.10.0.100:11311"
+    networks:
+      ros_net:
+        ipv4_address: 172.10.0.104
+      # internet:
 
 
   controller:
@@ -59,7 +69,7 @@ services:
       - "custom_web=web:8080"
       - "custom_ros=master:11311"
     networks:
-      - internet
+      - ros_net
 
 networks:
   ros_net:
@@ -69,10 +79,10 @@ networks:
       config:
       - subnet: 172.10.0.0/24
 
-  internet:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-      - subnet: 172.11.0.0/24
+  # internet:
+  #   driver: bridge
+  #   ipam:
+  #     driver: default
+  #     config:
+  #     - subnet: 172.11.0.0/24
 
